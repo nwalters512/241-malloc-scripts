@@ -6,7 +6,9 @@ Course staff were kind enough to expose the contest results in an easily-digesti
 
 ## Usage
 
-Open `malloc.js` and specify your nickname in the `nickname` variable at the top of the file. Then, run `npm start` from the root of this repo. The output will be printed to your console and nicely formatted.
+After cloning the repo, run `npm install` in the project root. This will install all required dependencies.
+
+Open `malloc.js` and specify your nickname in the `nickname` variable at the top of the file. Then, run `npm start` from the project root. The output will be printed to your console and nicely formatted.
 
 Currently, this script reports the following:
 
