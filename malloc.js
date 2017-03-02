@@ -117,11 +117,15 @@ function handleResponse(err, response, results) {
   // Let's figure out what the most recent grading run was
   const sortedResults = _.sortBy(results, (student) => new Date(student.time_stamp)).reverse()
 
-  console.log(`\nMost recent grading run: ${idNicknameMap[sortedResults[0].id]} at ${sortedResults[0].time_stamp}\n`)
+  const overallRanking = _.findIndex(results, (s) => s.id == nicknameId)
+
+  console.log(`\nMost recent grading run`.underline)
+  console.log(`Nickname: ${idNicknameMap[sortedResults[0].id]}`)
+  console.log(`Time: ${sortedResults[0].time_stamp}`)
+  console.log(`Revision: ${sortedResults[0].last_revision}\n`)
 
   // Finally, let's print our ranking for each test
   console.log(`Results for ${nickname}`.bold.underline)
-  const overallRanking = _.findIndex(results, (s) => s.id == nicknameId)
   console.log(`Overall rank: ${overallRanking + 1}!`.bold)
   console.log(`Overall score: ${results[overallRanking].rating.toFixed(2)}%`.bold)
   //console.log('\n')
