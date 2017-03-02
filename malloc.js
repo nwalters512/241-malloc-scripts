@@ -1,6 +1,7 @@
 const request = require('request')
 const _ = require('underscore')
 const colors = require('colors')
+const argv = require('yargs').argv
 
 const url = 'http://cs241grader.web.engr.illinois.edu/malloc/data/results.json'
 const nickname = 'snakeman'
@@ -73,6 +74,20 @@ function handleResponse(err, response, results) {
     })
   })
 
+  // Optionally, remove all users who are failing any test
+  // However, let's keep the user specified by nickname
+  if (argv.omitfailing) {
+    results = _.filter(results, (student) => {
+      if (student.id == nicknameId) {
+        return true
+      }
+
+      return _.every(student.test_cases, (test) => {
+        return test.pts_earned == test.total_pts
+      })
+    })
+  }
+
   // Let's split up results by test
   // First, map each student into an array of tests
   // This assumes the ordering of tests is the same between all students
@@ -89,6 +104,8 @@ function handleResponse(err, response, results) {
   // Each array will contain results only for a certain test
   const allTests = _.unzip(students)
 
+  //console.log(JSON.stringify(allTests, null, 4))
+
   // Now, let's sort the array of each test by the rating
   _.each(allTests, (test) => {
     test.sort((a, b) => b.rating - a.rating)
@@ -97,23 +114,29 @@ function handleResponse(err, response, results) {
   // Sort the results array by rating so we can figure out what our actual rating is
   results.sort((a, b) => b.rating - a.rating)
 
+  // Let's figure out what the most recent grading run was
+  const sortedResults = _.sortBy(results, (student) => new Date(student.time_stamp)).reverse()
+
+  console.log(`\nMost recent grading run: ${idNicknameMap[sortedResults[0].id]} at ${sortedResults[0].time_stamp}\n`)
+
   // Finally, let's print our ranking for each test
-  console.log(`Showing results for ${nickname}\n`)
+  console.log(`Results for ${nickname}`.bold.underline)
   const overallRanking = _.findIndex(results, (s) => s.id == nicknameId)
-  console.log(`Overall, your ranking is ${overallRanking + 1}!\n`.bold)
+  console.log(`Overall rank: ${overallRanking + 1}!`.bold)
+  console.log(`Overall score: ${results[overallRanking].rating.toFixed(2)}%`.bold)
+  //console.log('\n')
+
   _.each(allTests, (test, index) => {
-    //console.log(JSON.stringify(test, null, 4))
     const ranking = _.findIndex(test, (t) => t.id == nicknameId)
     const studentResult = test[ranking]
     const bestResult = test[0]
     if (studentResult.pts_earned != studentResult.total_pts) {
-      console.log(`TEST ${index + 1}: FAILED\n`.red.bold)
+      console.log(`\nTEST ${index + 1}: FAILED`.red.bold.underline)
     } else {
-      console.log(`TEST ${index + 1}: PASSED`.green.bold)
+      console.log(`\nTEST ${index + 1}: PASSED`.green.bold.underline)
       console.log(`Rank: `.grey.bold + `${ranking + 1}`)
-      console.log(`Score: `.grey.bold + `${test[ranking].rating.toFixed(2)}%`)
-      console.log(`Top Score: `.grey.bold + `${test[0].rating.toFixed(2)}% by ` + `${idNicknameMap[test[0].id]}`.underline)
-      console.log('\n')
+      console.log(`Score: `.grey.bold + `${studentResult.rating.toFixed(2)}%`)
+      console.log(`Top Score: `.grey.bold + `${bestResult.rating.toFixed(2)}% by '${idNicknameMap[bestResult.id]}'`)
     }
   })
 }
