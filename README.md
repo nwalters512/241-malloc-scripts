@@ -17,4 +17,6 @@ Currently, this script reports the following:
 * Your score for each test case as a percentage of glibc's performance (lower is better)
 * The top score and that score's nickname for each test case
 
+You can optionally pass the flag `--omitfailing` to skip people who are failing any of the tests when computing rankings. To run with `npm`, run it like `npm start -- --omitfailing`.
+
 This script uses the formulas from the source code of the contest page. Those formulas are apparently changing frequently, and they currently do some hacky things like hardcoding the results of glibc and adding in various "fudge factors". The formulas in this script are not guaranteed to match the current formulas. Use at your own risk!
