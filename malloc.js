@@ -4,7 +4,7 @@ const colors = require('colors')
 const argv = require('yargs').argv
 
 const url = 'http://cs241grader.web.engr.illinois.edu/malloc/data/results.json'
-const nickname = 'snakeman'
+const nickname = 'spcl csng wnt win ;)'
 
 console.log("Fetching latest results...")
 
@@ -46,7 +46,7 @@ function handleResponse(err, response, results) {
   })
 
   if (nicknameId === null) {
-    console.log(`ERROR: student with nickname '${student.nickname}' not found. Aborting...`.red)
+    console.log(`ERROR: student with nickname '${nickname}' not found. Aborting...`.red)
     return
   }
 
