@@ -4,7 +4,7 @@ const colors = require('colors')
 const argv = require('yargs').argv
 
 const url = 'http://cs241grader.web.engr.illinois.edu/malloc/data/results.json'
-const nickname = 'spcl csng wnt win ;)'
+const nickname = 'Rent this spot: $5'
 
 console.log("Fetching latest results...")
 
@@ -156,17 +156,17 @@ function fixGlibc(glibc) {
   // TODO: runtimes are currently incorrect and need to be updated...
   // hardcode for now
   glibc.test_cases[0].runtime = 0.372000
-  glibc.test_cases[1].runtime = 0.396000
-  glibc.test_cases[2].runtime = 1.224000
-  glibc.test_cases[3].runtime = 0.472000
+  glibc.test_cases[1].runtime = 0.392000
+  glibc.test_cases[2].runtime = 1.220000
+  glibc.test_cases[3].runtime = 0.456000
   glibc.test_cases[4].runtime = 0.196000
   glibc.test_cases[5].runtime = 8.128000
-  glibc.test_cases[6].runtime = 3.276000
-  glibc.test_cases[7].runtime = 4.532000
+  glibc.test_cases[6].runtime = 3.272000
+  glibc.test_cases[7].runtime = 4.528000
   glibc.test_cases[8].runtime = 0.100000
-  glibc.test_cases[9].runtime = 11.244000
-  glibc.test_cases[10].runtime = 2.208000
-  glibc.test_cases[11].runtime = 3.824000
+  glibc.test_cases[9].runtime = 11.216000
+  glibc.test_cases[10].runtime = 0.192000
+  glibc.test_cases[11].runtime = 7.644000
 }
 
 // From http://cs241grader.web.engr.illinois.edu/malloc/
@@ -190,9 +190,9 @@ function getTestRating(ta, student) {
   var st_max = student_test_case.max_memory > 0 ?
     (student_test_case.max_memory + memory_fudge) : Infinity;
   return (
-    (1 / 4) * Math.log2(ta_run / st_run + 1) +
-    (3 / 8) * Math.log2(ta_avg / st_avg + 1) +
-    (3 / 8) * Math.log2(ta_max / st_max + 1));
+    (0.25) * Math.log2(ta_run / st_run + 1) +
+    (3/8) * Math.log2(ta_avg / st_avg + 1) +
+    (3/8) * Math.log2(ta_max / st_max + 1));
 }
 
 var getRating = function(ta, student) {
